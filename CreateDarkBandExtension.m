@@ -5,7 +5,7 @@
 
 %Define these in main script
 %subject="sub-102311";
-%LRp=["L","R"];
+LRp=["L","R"];
 
 for h=1:2
     U_nii=load_untouch_nii(sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_AP.nii.gz',subject,subject,LRp(h)));
@@ -48,20 +48,22 @@ for h=1:2
     U_db_nii(region)=U_db_crop_nii.img(:,:,:);
     U_db_nii=make_nii(U_db_nii);
     U_db_nii.hdr=U_nii.hdr;
-    save_nii(U_db_nii,sprintf('..\\..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_AP_darkband.nii.gz',subject,subject,LRp(h)));
+    save_nii(U_db_nii,sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_AP_darkband.nii.gz',subject,subject,LRp(h)));
 
     V_db_nii=NaN(sz);
     V_db_nii(region)=V_db_crop_nii.img(:,:,:);
     V_db_nii=make_nii(V_db_nii);
     V_db_nii.hdr=V_nii.hdr;
-    save_nii(V_db_nii,sprintf('..\\..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_PD_darkband.nii.gz',subject,subject,LRp(h)));
+    save_nii(V_db_nii,sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_PD_darkband.nii.gz',subject,subject,LRp(h)));
 
     W_db_nii=NaN(sz);
     W_db_nii(region)=W_db_crop_nii.img(:,:,:);
     W_db_nii=make_nii(W_db_nii);
     W_db_nii.hdr=W_nii.hdr;
-    save_nii(W_db_nii,sprintf('..\\..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_IO_darkband.nii.gz',subject,subject,LRp(h)));
+    save_nii(W_db_nii,sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_IO_darkband.nii.gz',subject,subject,LRp(h)));
 
     
 
 end
+
+clear
