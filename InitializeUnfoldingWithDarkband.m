@@ -21,7 +21,16 @@ indsu=find(isnan(U_nii.img)==0);
 indsv=find(isnan(V_nii.img)==0);
 indsw=find(isnan(W_nii.img)==0);
 
-inds=indsu;
+sizeinds=[size(indsu,1),size(indsv,1),size(indsw,1)];
+
+indcheckp=find(sizeinds==min(sizeinds))
+indcheck=indcheckp(1);
+
+indcheck=find(sizeinds==min(sizeinds))
+
+if indcheck==1 inds=indsu; end 
+if indcheck==2 inds=indsv; end 
+if indcheck==3 inds=indsw; end 
 
 global u v w i_L j_L k_L;
 [i_L,j_L,k_L]=ind2sub(size(U_nii.img),inds);
