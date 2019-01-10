@@ -8,7 +8,7 @@
 
 %load the coordinates (including darkband)
 U_nii=load_untouch_nii(sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_AP_darkband.nii.gz',subject,subject,LR));
-V_nii=load_untouch_nii(sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_PD_darkband.nii.gz',subject,subject,LR'));
+V_nii=load_untouch_nii(sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_PD_darkband.nii.gz',subject,subject,LR));
 W_nii=load_untouch_nii(sprintf('..\\HippUnfold\\%s\\anat\\%s_hemi-%s_label-HippUnfold_IO_darkband.nii.gz',subject,subject,LR));
 
 %Nan out the fields
@@ -25,8 +25,6 @@ sizeinds=[size(indsu,1),size(indsv,1),size(indsw,1)];
 
 indcheckp=find(sizeinds==min(sizeinds))
 indcheck=indcheckp(1);
-
-indcheck=find(sizeinds==min(sizeinds))
 
 if indcheck==1 inds=indsu; end 
 if indcheck==2 inds=indsv; end 
@@ -70,7 +68,7 @@ spc=alphaSpectrum(Hippo_alpha);
 Hippo_alpha.Alpha=min(spc);
 % 
 global uvw_alpha;
-uvw_alpha=alphaShape(u,v,w);%'HoleThreshold',10000000);
-uvw_alpha.Alpha=0.8;
+uvw_alpha=alphaShape(u,v,w,'HoleThreshold',10000000);
+%uvw_alpha.Alpha=0.8;
 
 

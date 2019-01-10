@@ -8,7 +8,7 @@ function final_grad_dev_nii = FinalizeGradDev(grad_dev1_nii,grad_dev2_nii,grad_d
 %have num=3
 %make sure you subtract out the shear part and keep only the rotation part
 %make sure you subtract the identity for the final graddev matrix as this
-%is the standard used by all the code (AFIK)
+%is the standard used by all the code (AFAIK)
 
 final_grad_dev_nii=grad_dev1_nii;
 sz=size(grad_dev1_nii.img);
@@ -47,6 +47,8 @@ if(num==3)
     end
 end
 
+
+
 %get rid of shear part and subtract identity
 for i=1:sz(1)
     for j=1:sz(2)
@@ -54,7 +56,7 @@ for i=1:sz(1)
             gd_temp(:)=final_grad_dev_nii.img(i,j,k,:);
             J_temp=graddev2jacobian(gd_temp);
             det_temp=det(J_temp);
-            if(isnan(det_temp)~=1)
+            if(isnan(det_temp)~=1 && det_temp~=0)
                 [R U V]=poldecomp(J_temp);
                 J_temp=R-eye(3);
             else

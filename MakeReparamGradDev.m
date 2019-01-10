@@ -15,3 +15,6 @@ grad_dev_phit_utvtwt_nii=PushField(grad_dev_phit_uvw_nii,U_utvtwt_nii,V_utvtwt_n
 %make the final grad dev file in utvtwt space
 grad_dev_phit_phi_utvtwt_final_nii=FinalizeGradDev(grad_dev_phit_utvtwt_nii,grad_dev_phi_utvtwt_nii,0,2);
 save_nii(grad_dev_phit_phi_utvtwt_final_nii,sprintf('..\\Diffusion\\%s\\anat\\Reparam\\%s\\grad_dev.nii.gz',subject,LR));
+save_nii(grad_dev_phi_utvtwt_nii,sprintf('..\\Diffusion\\%s\\anat\\Reparam\\%s\\grad_dev_phi_utvtwt_notfinal.nii.gz',subject,LR));
+save_nii(grad_dev_phit_utvtwt_nii,sprintf('..\\Diffusion\\%s\\anat\\Reparam\\%s\\grad_dev_phit_utvtwt_notfinal.nii.gz',subject,LR));
+

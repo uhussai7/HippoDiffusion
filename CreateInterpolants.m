@@ -20,7 +20,7 @@ for i=1:size(Xuvw_nii.img,1)
             if(inShape(uvw_alpha,temp(1),temp(2),temp(3))==0)
                 Xuvw_nii.img(i,j,k)=NaN;
                 Yuvw_nii.img(i,j,k)=NaN;
-                Xuvw_nii.img(i,j,k)=NaN;
+                Zuvw_nii.img(i,j,k)=NaN;
             end
         end
     end

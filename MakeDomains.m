@@ -3,7 +3,7 @@ se(1,:)=[min(u) max(u)];
 se(2,:)=[min(v) max(v)];
 se(3,:)=[min(w) max(w)];
 
-[U_dom_nii, V_dom_nii, W_dom_nii]=MakeDomain(se,100,100,50,uvw_alpha,0,0);
+[U_dom_nii, V_dom_nii, W_dom_nii]=MakeDomain(se,100,100,10,uvw_alpha,0,0);
 [X_uvw_nii,Y_uvw_nii,Z_uvw_nii]=MakeCoordinateField(U_dom_nii,V_dom_nii,W_dom_nii,Fx_uvw,Fy_uvw,Fz_uvw);
 [Ut_uvw_nii,Vt_uvw_nii,Wt_uvw_nii]=MakeCoordinateField(U_dom_nii,V_dom_nii,W_dom_nii,Fut_uvw,Fvt_uvw,Fwt_uvw);
 

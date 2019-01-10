@@ -99,7 +99,7 @@ while size(inds_db,1)>1
          break;
      end
      counter=counter+1;
-     if(counter>0)
+     if(counter>2)
         break;
     end
     

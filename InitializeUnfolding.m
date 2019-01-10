@@ -64,8 +64,8 @@ for i=1:size(i_L,1)
 end
 %[x y z]=World(U_nii,i_L,j_L,k_L);
 Hippo_alpha=alphaShape(x,y,z)
-%spc=alphaSpectrum(Hippo_alpha);
-%Hippo_alpha.Alpha=min(spc);
+spc=alphaSpectrum(Hippo_alpha);
+Hippo_alpha.Alpha=min(spc);
 % 
 global uvw_alpha;
 uvw_alpha=alphaShape(u,v,w);%'HoleThreshold',10000000);

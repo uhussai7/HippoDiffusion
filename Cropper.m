@@ -39,6 +39,7 @@ if(In_nii.hdr.dime.dim(5)~=1)
     In_crop_nii.hdr.hist.srow_y(4)=min(min_xyz_w(2),max_xyz_w(2));
     In_crop_nii.hdr.hist.srow_z(4)=min(min_xyz_w(3),max_xyz_w(3));
     In_crop_nii.hdr.hist.sform_code=1;
+    In_crop_nii.hdr.hist.qform_code=0
 else
     In_sz=In_nii.hdr.dime.dim(2:4);
     In_cropping=zeros(In_sz);
@@ -52,6 +53,7 @@ else
     In_crop_nii.hdr.hist.srow_y(4)=min(min_xyz_w(2),max_xyz_w(2));
     In_crop_nii.hdr.hist.srow_z(4)=min(min_xyz_w(3),max_xyz_w(3));
     In_crop_nii.hdr.hist.sform_code=1;
+    In_crop_nii.hdr.hist.qform_code=0
 end
 
 
