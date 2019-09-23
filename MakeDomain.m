@@ -13,6 +13,10 @@ if(usenii==0)
     sampling2=se(2,1):(se(2,2)-se(2,1))/(N2-1):se(2,2);
     sampling3=se(3,1):(se(3,2)-se(3,1))/(N3-1):se(3,2);
 
+    sampling1(2)-sampling1(1)
+    sampling2(2)-sampling2(1)
+    sampling3(2)-sampling3(1)
+    
     [out2_nii,out1_nii,out3_nii]=meshgrid(sampling2,sampling1,sampling3);
 
     for i=1:N1

@@ -16,9 +16,15 @@ se(3,:)=[min(wt) max(wt)];
 diff_ut=se(1,2)-se(1,1);
 diff_vt=se(2,2)-se(2,1);
 diff_wt=se(3,2)-se(3,1);
-Nut=100;
-Nvt=floor((Nut-1)*diff_vt/diff_ut+1);
-Nwt=floor((Nut-1)*diff_wt/diff_ut+1);
+%Nut=100;
+%Nvt=floor((Nut-1)*diff_vt/diff_ut+1);
+%Nwt=floor((Nut-1)*diff_wt/diff_ut+1);
+
+res=0.625;
+Nut=(diff_ut/res+1);
+Nvt=(diff_vt/res+1);
+Nwt=(diff_wt/res+1);
+
 
 [Ut_dom_nii, Vt_dom_nii, Wt_dom_nii]=MakeDomain(se,Nut,Nvt,Nwt,utvtwt_alpha,0,0);
 [U_utvtwt_nii,V_utvtwt_nii,W_utvtwt_nii]=MakeCoordinateField(Ut_dom_nii,Vt_dom_nii,Wt_dom_nii,Fu_utvtwt,Fv_utvtwt,Fw_utvtwt);

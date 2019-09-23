@@ -1,1 +1,1 @@
-save(sprintf('..\\Probtrackx\\%s_%s\\data',subject,LR));
+save(sprintf('..\\ProbtrackxNative\\%s_%s\\data',subject,LR));

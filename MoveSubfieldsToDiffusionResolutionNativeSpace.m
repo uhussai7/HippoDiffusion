@@ -73,7 +73,7 @@ for subfield=1:5
     save_nii(sub_nii,sprintf('..\\Diffusion\\%s\\anat\\Native\\Crop\\%s\\sub%d.nii.gz',subject,LR,subfield));
 end
 
-[vertices, label, colortable]=read_annotation('..\\label\\lh.aparc.a2009s.annot')
+%[vertices, label, colortable]=read_annotation('..\\label\\lh.aparc.a2009s.annot')
 
 
 % colors={'red', 'blue', 'green', 'yellow', 'white'}

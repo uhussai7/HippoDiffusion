@@ -1,1 +1,1 @@
-diff_nii=load_untouch_nii(sprintf('..\\Diffusion\\%s\\anat\\Native\\data.nii.gz',subject));
+diff_nii=load_untouch_nii(sprintf('..\\Diffusion\\%s\\anat\\Native_lowRes\\data.nii.gz',subject));

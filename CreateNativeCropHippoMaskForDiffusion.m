@@ -30,7 +30,7 @@ for c=1:size(inds_mask,1)
 %      end
 end
 
-mask_nii(:)=1;
+%mask_nii(:)=1;
 
 mask_nii=make_nii(mask_nii);
     
@@ -40,3 +40,4 @@ mask_nii.hdr.dime.dim(5)=1;
 mask_nii.hdr.dime.pixdim(5)=0;
 mask_nii.hdr.hist.qform_code=0;
 
+save_nii(mask_nii,sprintf('..\\Diffusion\\%s\\anat\\Native_lowRes\\Crop\\%s\\nodif_brain_mask.nii.gz',subject,LR));

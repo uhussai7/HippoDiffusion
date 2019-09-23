@@ -1,5 +1,5 @@
 subject="sub-100610";
-LR='R';
+LR='L';
 
 
 subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
@@ -26,6 +26,7 @@ for iii=1:4
         MakeDomains
         MakeReparamDiffusionVolume
         MakeReparamGradDev
+        MakeReparamGradDevAndDistortion
         clearvars -except iii jjj subjects LRs 
     end
 end
@@ -133,6 +134,30 @@ for iii=1:4
     end
 end
 
+%% create the connectivity matrices and plot them all as subplots
+
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+iii=1
+jjj=1
+p=1;
+for jjj=1:2
+    subject=subjects(iii);
+    %LoadNativeDiffusionVolume
+    for iii=1:4
+        subplot(2,4,p);
+        p=p+1;
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        LoadReparamConnectivityData
+        CreateConnectivityMatrix
+        title(sprintf("%s %s",subject,LR));
+        SaveConnectivityData
+        clearvars -except iii jjj subjects LRs p
+    end
+end
+
 %% Create 3 layers
 subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
 LRs=['L','R']
@@ -236,3 +261,185 @@ for iii=1:4
     end
 end
 
+
+%% Create hippocampus masks for full diffusion resolution
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+for iii=1:4
+    for jjj=1:2
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        InitializeUnfoldingWithDarkband 
+        CreateNativeHippoMaskWithDiffusionResolution
+        figure;plot(large_hippo_alpha);
+    end
+end
+
+%% Create subfields for full diffusion resolution
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+
+for iii=1:4
+    for jjj=1:2
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        InitializeUnfoldingWithDarkband 
+        CreateInterpolants
+        MoveSubfieldsToDiffusionResolutionNativeSpaceFull
+        clearvars -except iii jjj subjects LRs 
+    end
+end
+
+
+%% make reparam t2 volume
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+for iii=1:4
+    for jjj=1:2
+        subject=subjects(iii)
+        LR=LRs(jjj);
+        InitializeUnfoldingWithDarkband
+        CreateInterpolants
+        LoadNativeT2Volume
+        CropNativeT2Volume
+        MakeDomains
+        MakeReparamT2Volume
+        clearvars -except iii jjj subjects LRs 
+    end
+end     
+
+
+
+%% create the connectivity matrices and plot them all as subplots
+
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+iii=3
+jjj=1
+p=1;
+for iii=1:4
+    subject=subjects(iii);
+    %LoadNativeDiffusionVolume
+    for jjj=1:2
+        subplot(2,4,p);
+        p=p+1;
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        LoadReparamConnectivityCurvDist
+        CreateConnectivityMatrix
+        SaveConnectivityData
+        clearvars -except iii jjj subjects LRs p
+    end
+end
+
+
+
+%% create the connectivity matrices and plot them all as subplots
+
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+iii=1
+jjj=1
+p=1;
+for jjj=1:2
+    subject=subjects(iii);
+    %LoadNativeDiffusionVolume
+    for iii=1:4
+        subplot(2,4,p);
+        p=p+1;
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        %LoadReparamConnectivityData
+        CreateReparamConnectivityMatrix_keep_avoid
+        title(sprintf("%s %s",subject,LR));
+        %SaveConnectivityData
+        clearvars -except iii jjj subjects LRs p
+    end
+end
+
+%% create the AP subfields seeds for all subjects
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+
+iii=1
+jjj=1
+p=1;
+for jjj=1:2
+    for iii=1:4
+        subject=subjects(iii);
+        LR=LRs(jjj);
+        APConnectivityMasks
+    end
+    clearvars -except iii jjj subjects LRs p
+end
+
+
+
+%% Create X_utvtwt Y_utvtwt Z_utvtwt as nifti images
+
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+for iii=1:4
+    for jjj=1:2
+        subject=subjects(iii)
+        LR=LRs(jjj);
+        InitializeUnfoldingWithDarkband
+        CreateInterpolants
+        MakeDomains
+        save_nii(X_utvtwt_nii, sprintf('..\\%s_%s_X_utvtwt.nii.gz',subject,LR));
+        save_nii(Y_utvtwt_nii, sprintf('..\\%s_%s_Y_utvtwt.nii.gz',subject,LR));
+        save_nii(Z_utvtwt_nii, sprintf('..\\%s_%s_Z_utvtwt.nii.gz',subject,LR));
+        clearvars -except iii jjj subjects LRs 
+    end
+end
+
+
+
+%% make subfield masks again and again and again
+
+
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+ress=["0625","125"]
+for rrr=1:2
+    %res=ress(rrr);
+    for iii=1:4
+        subject=subjects(iii);
+        for jjj=1:2
+            subject=subjects(iii);
+            LR=LRs(jjj);
+            InitializeUnfoldingWithDarkband 
+            CreateInterpolants
+            MakeDomains
+            nodif_brain_mask_nii=load_untouch_nii(sprintf('..\\hipposubjects_reparam_%smm\\%s_%s\\dwi\\multishell\\nodif_brain_mask.nii.gz',ress(rrr),subject,LR));
+            MakeSubfieldsAgainWithAFunction
+            clearvars -except iii jjj rrr ress subjects LRs diff_nii
+        end
+    end
+end
+
+
+
+
+%% Create the subfields for native diffusion space at different resolution
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
+LRs=['L','R']
+ress=["0625","125"]
+resw=["hiRes", "lowRes"]
+
+for rrr=1:2
+    for iii=1:4
+        for jjj=1:2
+            subject=subjects(iii);
+            LR=LRs(jjj);
+            InitializeUnfoldingWithDarkband 
+            CreateInterpolants
+            MoveSubfieldsToManyDiffusionResolutionNativeSpace
+            clearvars -except iii jjj rrr subjects LRs ress resw
+        end
+    end
+end

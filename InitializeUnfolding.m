@@ -50,7 +50,7 @@ max_xyz(3)=max(k_L)+1;
 
 %% create alpha shape 
 global Hippo_alpha;
-Hippo_alpha=alphaShape(i_L,j_L,k_L);
+%Hippo_alpha=alphaShape(i_L,j_L,k_L);
 %spc=alphaSpectrum(Hippo_alpha);
 %Hippo_alpha.Alpha=min(spc);
 %% create alpha shape in world coordinates

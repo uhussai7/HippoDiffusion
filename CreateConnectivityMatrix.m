@@ -1,5 +1,6 @@
 %xz=load('fdt_matrix1.dot');
 M=full(spconvert(xz));
+M=M/(max(M(:)));
 %figure;imagesc(M);
  
 %coord = load('coords_for_fdt_matrix1')+1;
@@ -52,14 +53,15 @@ end
 figure;
 imagesc(Msub)
 axis equal;
+axis tight;
 set(gca,'xtick',[])
 set(gca,'ytick',[])
 
-text(0,1,"CA4")
-text(0,2,"CA3")
-text(0,3,"CA2")
-text(0,4,"CA1")
-text(0,5,"SUB")
+text(-0.5,1,"CA4")
+text(-0.5,2,"CA3")
+text(-0.5,3,"CA2")
+text(-0.5,4,"CA1")
+text(-0.5,5,"SUB")
 
 text(1,5.75,"CA4",'HorizontalAlignment','center','VerticalAlignment','middle');
 text(2,5.75,"CA3",'HorizontalAlignment','center','VerticalAlignment','middle');
