@@ -1,29 +1,85 @@
-function Msub = CollapseConnectivity(subject,LR,NR,DI,AP)
+function Msub = CollapseConnectivity(subject,LR,NR,DI,AP,BIN,res)
 
-%NR=0 Native, NR=1 Reparam
+%NR=1 Native, NR=2 Reparam
 %DI=0 Indirect, DI=1, Direct 
 %AP=1/0 Anterior Posterior ON/OFF
+%BIN =1 will overwrite all other options and go to reparam bins mode
 
-NatRep=["Native","Reparam"];
+NatRep=["native","reparam"];
 DirIndir=["Indirect","Direct"];
+resolution=["125","0625"];
 %AP=["","ap"];
 
 
-thepath=sprintf('..\\PaperResults\\%s\\Data\\ConnectivityMatrix\\%s',NatRep(NR+1),DirIndir(DI+1))
+thepath=sprintf('..\\ChangingRes\\hipposubjects_%s_%smm\\%s_%s',NatRep(NR),resolution(res),subject,LR);
+
+if(BIN==1)
+    fprintf("WARNING: Other options ignored, if BIN=1, I will work with binned subfields in reparam space.")
+    thepath=sprintf('..\\ChangingRes\\hipposubjects_reparam_%smm\\%s_%s',resolution(res),subject,LR);
+    xz=load(sprintf('%s\\probtrackx_indirect_bins\\fdt_matrix1.dot',thepath));
+    coord=load(sprintf('%s\\probtrackx_indirect_bins\\coords_for_fdt_matrix1',thepath))+1;
+    M=full(spconvert(xz));
+    Msub=CollapseMatrix(M,coord);
+    map=zeros(1,120);
+    count=1;
+    for io=1:2 %this is going to be the "new" mapping from  
+        for aapee=1:6
+            for peedee=1:10
+                mapping(peedee,aapee,io)= count;
+                count=count+1;
+            end
+        end
+    end
+    count=1;
+    for peedee=1:10
+        for aapee=1:6
+            for io=1:2 %this is the old mapping or the given mapping from past mistakes                  
+                mapping1(peedee,aapee,io)= count;
+                count=count+1;
+            end
+        end
+    end
+    for new_coords=1:120
+        inds=find(mapping==new_coords);
+        [peedee,aapee,io]=ind2sub(size(mapping),inds);
+        oldofnew(new_coords)=mapping1(peedee,aapee,io);
+    end
+    Msub_old=Msub;
+    for new_coords_i=1:120
+        for new_coords_j=1:120
+            i=oldofnew(new_coords_i);
+            j=oldofnew(new_coords_j);
+            Msub(new_coords_i,new_coords_j)=Msub_old(i,j);
+        end
+    end
+    return;
+end
+
 
 if(DI==0 && AP==0) %this is the indirect case (most straightforward)
-    xz=load(sprintf('%s\\%s_%s_probtrackx_indirect\\fdt_matrix1.dot',thepath,subject,LR));
-    coord=load(sprintf('%s\\%s_%s_probtrackx_indirect\\coords_for_fdt_matrix1',thepath,subject,LR))+1;
+    xz=load(sprintf('%s\\probtrackx_indirect\\fdt_matrix1.dot',thepath));
+    coord=load(sprintf('%s\\probtrackx_indirect\\coords_for_fdt_matrix1',thepath))+1;
     M=full(spconvert(xz));
     Msub=CollapseMatrix(M,coord);
     return;
 end
 
+if(AP==1 && DI==0)
+    xz=load(sprintf('%s\\probtrackx_indirect_ap\\fdt_matrix1.dot',thepath));
+    coord=load(sprintf('%s\\probtrackx_indirect_ap\\coords_for_fdt_matrix1',thepath))+1;
+    M=full(spconvert(xz));
+    size(M)
+    Msub=CollapseMatrix(M,coord);
+    return;
+end
+
+
+
 if(DI~=0 && AP==0) %this is the direct case for each entry you have to load seprate file
     for si=1:4
         for sj=si+1:5
-            xz=load(sprintf('%s\\%s_%s_%d%d_keep_avoid_probtrack\\fdt_matrix1.dot',thepath,subject,LR,si,sj));
-            coord=load(sprintf('%s\\%s_%s_%d%d_keep_avoid_probtrack\\coords_for_fdt_matrix1',thepath,subject,LR,si,sj))+1;
+            xz=load(sprintf('%s\\probtrackx_direct_pd_%d%d\\fdt_matrix1.dot',thepath,si,sj));
+            coord=load(sprintf('%s\\probtrackx_direct_pd_%d%d\\coords_for_fdt_matrix1',thepath,si,sj))+1;
             M=full(spconvert(xz));
             Mtemp=CollapseMatrix(M,coord);
             Msub(si,si)=Mtemp(1,1);
@@ -36,22 +92,13 @@ if(DI~=0 && AP==0) %this is the direct case for each entry you have to load sepr
 end
 
 
-if(AP==1 && DI==0)
-    thepath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\AnteriorPosterior\\Indirect'
-    xz=load(sprintf('%s\\%s_%s_probtrackx_ap_indirect\\fdt_matrix1.dot',thepath,subject,LR));
-    coord=load(sprintf('%s\\%s_%s_probtrackx_ap_indirect\\coords_for_fdt_matrix1',thepath,subject,LR))+1;
-    M=full(spconvert(xz));
-    Msub=CollapseMatrix(M,coord);
-    return;
-end
 
-if(AP==1 && DI==1) %the following are the only conditions where we use AP
-    thepath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\AnteriorPosterior\\Direct'
+if(AP==1 && DI==1) 
     for ap=1:6
         for si=1:4
             for sj=si+1:5
-                xz=load(sprintf('%s\\%s_%s_ap%d_%d%d_probtrackx_direct\\fdt_matrix1.dot',thepath,subject,LR,ap,si,sj));
-                coord=load(sprintf('%s\\%s_%s_ap%d_%d%d_probtrackx_direct\\coords_for_fdt_matrix1',thepath,subject,LR,ap,si,sj))+1; 
+                xz=load(sprintf('%s\\probtrackx_direct_pd_ap_%d%d%d\\fdt_matrix1.dot',thepath,si,sj,ap));
+                coord=load(sprintf('%s\\probtrackx_direct_pd_ap_%d%d%d\\coords_for_fdt_matrix1',thepath,si,sj,ap))+1; 
                 M=full(spconvert(xz));
                 Mtemp=CollapseMatrix(M,coord);
                 Msub(ap,si,si)=Mtemp(1,1);
@@ -89,3 +136,5 @@ for i=1:N_fields
 end
 
 end
+
+

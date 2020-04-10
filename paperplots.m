@@ -1,8 +1,8 @@
-nativeIndirectPath='..\\PaperResults\\Native\\Data\\ConnectivityMatrix\\Indirect'
-nativeDirectPath='..\\PaperResults\\Native\\Data\\ConnectivityMatrix\\Direct'
-reparamIndirectPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\Indirect'
-reparamDirectPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\Direct'
-reparamDirectApPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\AnteriorPosterior\\Direct'
+%nativeIndirectPath='..\\PaperResults\\Native\\Data\\ConnectivityMatrix\\Indirect'
+%nativeDirectPath='..\\PaperResults\\Native\\Data\\ConnectivityMatrix\\Direct'
+%reparamIndirectPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\Indirect'
+%reparamDirectPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\Direct'
+%reparamDirectApPath='..\\PaperResults\\Reparam\\Data\\ConnectivityMatrix\\AnteriorPosterior\\Direct'
 
 
 %% Args for CollapseConnectivity function 
@@ -19,7 +19,7 @@ LRs=['L','R']
 for iii=1:4    
     iii
     for jjj=1:2
-        Msub=CollapseConnectivity(subjects(iii),LRs(jjj),0,0,0);
+        Msub=CollapseConnectivity(subjects(iii),LRs(jjj),2,0,0,0,2);
         subplot(2,4,4*(jjj-1)+iii);
         imagesc((Msub));
         title(sprintf('%s %s',subjects(iii),LRs(jjj)));
@@ -72,7 +72,7 @@ LRs=['L','R']
 for iii=1:4    
     iii
     for jjj=1:2
-        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),0,0,0);
+        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),2,1,0,0,2);
     end
 end
 
@@ -139,7 +139,7 @@ LRs=['L','R']
 for iii=1:4    
     iii
     for jjj=1:2
-        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),1,1,1);
+        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),2,1,1,0,2);
     end
 end
 
@@ -192,11 +192,11 @@ for r=1:5
     %plot(diag_mean(r,:))
     hold on
     %plot(diag_mean(r,:),c(r),'LineWidth',2);
-    errorbar(1:5,mean_diagnals(2:6,r),err_diagnals(2:6,r),c(r),'LineWidth',2);
+    errorbar(1:6,mean_diagnals(1:6,r),err_diagnals(1:6,r),c(r),'LineWidth',2);
 end
 legend('CA4','CA3','CA2','CA1','SUB');
-xlim([0.5,5.5])
-xticks(1:1:5)
+%xlim([0.5,5.5])
+%xticks(1:1:5)
 title('Mean intra-connectivity vs. AP bins')
 xlabel('AP Bins (posterior to anterior)')
 
@@ -207,24 +207,24 @@ for r=1:4
     %plot(diag_mean(r,:))
     hold on
     %plot(diag_mean(r,:),c(r),'LineWidth',2);
-    errorbar(1:5,mean_super_diagnals(2:6,r),err_super_diagnals(2:6,r),c(r),'LineWidth',2);
+    errorbar(1:6,mean_super_diagnals(1:6,r),err_super_diagnals(1:6,r),c(r),'LineWidth',2);
 end
 legend('CA4-CA3','CA3-CA2','CA2-CA1','CA1-SUB');
-xlim([0.5,5.5])
-xticks(1:1:5)
+%xlim([0.5,5.5])
+%xticks(1:1:5)
 title('Mean inter-connectivity with adjacent subfield vs. AP bins')
 xlabel('AP Bins (posterior to anterior)')
 
 %% AP connectivity gradient graph (indirect)
 
 
-% Native space indirect (mean & std)
+% reparam space indirect (mean & std)
 subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
 LRs=['L','R']
 for iii=1:4    
     iii
     for jjj=1:2
-        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),0,0,1);
+        Mmaster{iii,jjj}=CollapseConnectivity(subjects(iii),LRs(jjj),2,0,1,0,2);
     end
 end
 
@@ -258,25 +258,21 @@ end
 Mmaster_variance_parity=variance/8;
 Mmaster_std=sqrt(Mmaster_variance_parity);
     
-
-
-
 %extract the relevant entries for a AP plot
-diag_mean=zeros(5,6);
-diagp1_mean=zeros(5,6);
-diag_variance=zeros(5,6);
-diagp1_variance=zeros(5,6);
+diag_mean=zeros(6,5);
+diagp1_mean=zeros(6,4);
+diag_variance=zeros(6,5); %not really variance because later you set to std
+diagp1_variance=zeros(6,4);
 
-for t=1:6
-    for r=1:5
-        diag_mean(r,t)=Mmaster_mean_parity(5*(t-1)+r,5*(t-1)+r);
-        diag_variance(r,t)=Mmaster_variance_parity(5*(t-1)+r,5*(t-1)+r);
-        if(5*(t-1)+r+1<5*t)
-            diagp1_mean(r,t)=Mmaster_mean_parity(5*(t-1)+r,5*(t-1)+r+1);
-            diagp1_variance(r,t)=Mmaster_variance_parity(5*(t-1)+r,5*(t-1)+r+1);
-        else
-            diagp1_mean(r,t)=Mmaster_mean_parity(5*(t-1)+r,5*(t-1)+r-1);
-            diagp1_variance(r,t)=Mmaster_variance_parity(5*(t-1)+r,5*(t-1)+r-1);
+for antpos=1:6
+    for subfield=1:5
+        index_1=6*(subfield-1)+antpos;
+        index_2=6*(subfield+1-1)+antpos;
+        diag_mean(antpos,subfield)=Mmaster_mean(index_1,index_1)
+        diag_variance(antpos,subfield)=Mmaster_std(index_1,index_1)
+        if subfield<5
+            diagp1_mean(antpos,subfield)=Mmaster_mean(index_1,index_2)
+            diagp1_variance(antpos,subfield)=Mmaster_std(index_1,index_2)
         end
     end
 end
@@ -287,12 +283,12 @@ c=['r','g','b','m','k']
 for r=1:5
     %plot(diag_mean(r,:))
     hold on
-    %plot(diag_mean(r,:),c(r),'LineWidth',2);
-    errorbar(1:5,diag_mean(r,2:6),sqrt(diag_variance(r,2:6))/sqrt(8),c(r),'LineWidth',2);
+    %plot(diag_mean(:,r),c(r),'LineWidth',2);
+    errorbar(1:6,diag_mean(:,r),(diag_variance(:,r))/sqrt(8),c(r),'LineWidth',2);
 end
 legend('CA4','CA3','CA2','CA1','SUB');
-xlim([0.5,5.5])
-xticks(1:1:5)
+%xlim([0.5,5.5])
+%xticks(1:1:5)
 title('Mean intra-connectivity vs. AP bins')
 xlabel('AP Bins (posterior to anterior)')
 
@@ -303,11 +299,11 @@ for r=1:4
     %plot(diag_mean(r,:))
     hold on
     %plot(diag_mean(r,:),c(r),'LineWidth',2);
-    errorbar(1:5,diagp1_mean(r,2:6),sqrt(diagp1_variance(r,2:6))/sqrt(8),c(r),'LineWidth',2);
+        errorbar(1:6,diagp1_mean(:,r),(diagp1_variance(:,r))/sqrt(8),c(r),'LineWidth',2);
 end
 legend('CA4-CA3','CA3-CA2','CA2-CA1','CA1-SUB');
-xlim([0.5,5.5])
-xticks(1:1:5)
+%xlim([0.5,5.5])
+%xticks(1:1:5)
 title('Mean inter-connectivity with adjacent subfield vs. AP bins')
 xlabel('AP Bins (posterior to anterior)')
 %% False connection rate
@@ -391,3 +387,36 @@ for r=1:4
         end
     end
 end
+
+
+% Make the binning plots and save the data so the plots can be easily made
+% again and data can be extracted.
+figure;
+subjects=["sub-100610","sub-102311","sub-111312","sub-111514"];
+subfields=["CA4","CA3","CA2","CA1","Sub"];
+distprox=["dist","prox"];
+deepsuper=["deep","super"];
+LRs=["L","R"]
+antpos=["head-a","head-p","mid-a","mid-p","tail-a","tail-p"];
+%make the labels
+count=1;
+for io=1:2 %this is going to be the "new" mapping from  
+    for aapee=1:6
+        for peedee=1:10
+            pd_=mod(peedee,-5)+5;
+            pdf_=mod(peedee,-2)+2;
+            labels(count)=sprintf("%s-%s_%s_%s", subfields(pd_), distprox(pdf_), antpos(aapee), deepsuper(io));            
+        end
+    end
+end
+for iii=1:4    
+    iii
+    for jjj=1:2 
+        Msub=CollapseConnectivity(subjects(iii),LRs(jjj),1,1,1,1,2);
+        save(sprintf("..\\ConnectivityMatrices\\binned_data_%s_%s",subjects(iii),LRs(jjj)));
+    end
+end
+
+
+
+

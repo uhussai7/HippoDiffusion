@@ -20,7 +20,7 @@ stream_out=zeros(1,size(all_xyz,2));
 for s=1:size(all_xyz,2)
     for p=1:(size(all{1,s},1))
         if(isnan(all_xyz{1,s}(p,:))==0)
-            if(inShape(alphaS,all_xyz{1,s}(p,1),all_xyz{1,s}(p,2),all_xyz{1,s}(p,3))~=1)
+            if(inShape(alphaS,all_xyz{1,s}(p,1),all_xyz{1,s}(p,2),all_xyz{1,s}(p,3))~=1) % | size(all_xyz{1,s},1)<20 )
                 stream_out(s)=1;
                 break;
             end

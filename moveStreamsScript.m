@@ -35,3 +35,25 @@ all=readCaminoTracts('..\\nativeDeterministicTractography\\Crop\\native_trunc.Bf
 
 writeCaminoTracts(all_xyz_f,'..\\nativeDeterministicTractography\\Crop\\native_trunc_f.float');
 writeCaminoTracts(all_utvtwt_f,'..\\nativeDeterministicTractography\\Crop\\reparam_trunc_f.float');
+
+%% Move reaparam to native
+
+all=readCaminoTracts('..\\tracts_0625mm_reparam\\all.Bfloat');
+%[all_xyz_f, all_utvtwt_f]=moveStreams2Reparam(all,Fu_xyz,Fv_xyz,Fw_xyz,Fut_uvw,Fvt_uvw,Fwt_uvw,utvtwt_alpha);
+
+[all_xyz_f, all_utvtwt_f]=moveStreams2Native(all,Fu_utvtwt,Fv_utvtwt, Fw_utvtwt, Fx_uvw, Fy_uvw, Fz_uvw,Hippo_alpha);
+
+writeCaminoTracts(all_xyz_f,'..\\tracts_0625mm_native\\from_reparam_all_f.Bfloat');
+writeCaminoTracts(all_utvtwt_f,'..\\tracts_0625mm_reparam\\all_f.Bfloat');
+
+%% Move native to reparam
+
+all=readCaminoTracts('..\\tracts_0625mm_native\\all.Bfloat');
+[all_xyz_f, all_utvtwt_f]=moveStreams2Reparam(all,Fu_xyz,Fv_xyz,Fw_xyz,Fut_uvw,Fvt_uvw,Fwt_uvw,utvtwt_alpha);
+
+%[all_xyz_f, all_utvtwt_f]=moveStreams2Native(all,Fu_utvtwt,Fv_utvtwt, Fw_utvtwt, Fx_uvw, Fy_uvw, Fz_uvw,Hippo_alpha);
+
+writeCaminoTracts(all_xyz_f,'..\\tracts_0625mm_native\\all_f.Bfloat');
+writeCaminoTracts(all_utvtwt_f,'..\\tracts_0625mm_reparam\\from_native_all_f.Bfloat');
+
+

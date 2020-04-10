@@ -83,7 +83,7 @@ end
 function yesno=inBetween(X,Y,M)
     L=min([X,Y]);
     R=max([X,Y]);
-    if((L < M & R > M) | L==M | R==M)
+    if((L < M & R > M) | R==M)% | L==M)
         yesno=1;
         return
     else
