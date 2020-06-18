@@ -1,4 +1,4 @@
-%Go to Initial InitializeUnfoldingWithDarkband.m and change the paths for
+%Go to Initial InitializeUnfolding.m and change the paths for
 %U_nii V_nii W_nii
 
 %Go to MakeUnfoldDiffusionVolume.m and in the last line set the path for
@@ -7,25 +7,26 @@
 %Go to MakeUnfoldGradDev.m and set the paths for
 %the output of the graddev file and the brain mask
 
-%Then following is an example of the sequence on which to call the scripts
+%Then following is an example of the sequence in which to call the scripts
 %make sure subjects and LRs makes sense, these are "global" and each of the
-%paths described above rely on it.
+%paths described above rely on it or you can modify the code for the paths
+%directly
 
 subjects=["sub-100610","sub-102311","sub-111312","sub-111514"]
 LRs=['L','R']
 
 for iii=1:1
     subject=subjects(iii);
-    %LoadNativeDiffusionVolume
+    LoadNativeDiffusionVolume
     for jjj=1:1
         subject=subjects(iii);
         LR=LRs(jjj);
-        InitializeUnfoldingWithDarkband 
-        %InitializeUnfolding
-        %CropNativeDiffusionVolume
+        %InitializeUnfoldingWithDarkband 
+        InitializeUnfolding
+        CropNativeDiffusionVolume
         CreateInterpolants
         MakeDomains
-        %MakeUnfoldDiffusionVolume
+        MakeUnfoldDiffusionVolume
         MakeUnfoldGradDev
         clearvars -except iii jjj subjects LRs diff_nii
     end
